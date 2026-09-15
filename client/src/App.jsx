@@ -1,11 +1,13 @@
+import Layout from "./components/layout/Layout";
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-white">
-        Crypto Paper Trader
+    <Layout>
+      <h1 className="p-6 text-2xl font-bold">
+        🚀 Crypto Paper Trader
       </h1>
-    </div>
-  )
+    </Layout>
+  );
 }
 
-export default App
+export default App;
