@@ -1,6 +1,7 @@
 import BalanceCard from "../components/dashboard/BalanceCard";
 import CryptoList from "../components/crypto/CryptoList";
 import BuyForm from "../components/trading/BuyForm";
+import SellForm from "../components/trading/SellForm";
 
 const Dashboard = () => {
   return (
@@ -20,6 +21,8 @@ const Dashboard = () => {
       <CryptoList />
 
       <BuyForm />
+
+      <SellForm />
     </section>
   );
 };
