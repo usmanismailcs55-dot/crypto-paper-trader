@@ -1,11 +1,10 @@
 import Layout from "./components/layout/Layout";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <Layout>
-      <h1 className="p-6 text-2xl font-bold">
-        🚀 Crypto Paper Trader
-      </h1>
+      <Dashboard />
     </Layout>
   );
 }
