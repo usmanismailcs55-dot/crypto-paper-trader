@@ -11,8 +11,34 @@ const Register = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    // Prevent double submission
+    if (isLoading) {
+      return;
+    }
+
     setError("");
     setSuccess("");
+
+    // Check required fields
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setError("⚠️ Please fill in all fields.");
+      return;
+    }
+
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setError("⚠️ Please enter a valid email address.");
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      setError("⚠️ Password must be at least 6 characters.");
+      return;
+    }
+
     setIsLoading(true);
 
     console.log("Registration:", {
@@ -39,13 +65,19 @@ const Register = () => {
         </p>
 
         {error && (
-          <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
+          <div
+            role="alert"
+            className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400"
+          >
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mt-4 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-sm text-green-400">
+          <div
+            role="status"
+            className="mt-4 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-sm text-green-400"
+          >
             {success}
           </div>
         )}
@@ -65,7 +97,7 @@ const Register = () => {
               placeholder="Enter your name"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500"
+              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-green-500 focus:ring-2 focus:ring-green-500/30"
             />
           </div>
 
@@ -83,7 +115,7 @@ const Register = () => {
               placeholder="Enter your email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500"
+              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-green-500 focus:ring-2 focus:ring-green-500/30"
             />
           </div>
 
@@ -101,14 +133,14 @@ const Register = () => {
               placeholder="Create a password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500"
+              className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-green-500 focus:ring-2 focus:ring-green-500/30"
             />
           </div>
 
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full rounded-lg bg-green-600 px-4 py-3 font-semibold hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-green-600 px-4 py-3 font-semibold hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isLoading ? "⏳ Creating account..." : "📝 Create Account"}
           </button>
