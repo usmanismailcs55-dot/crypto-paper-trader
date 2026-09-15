@@ -3,16 +3,18 @@ import { useState } from "react";
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     setError("");
+    setSuccess("");
     setIsLoading(true);
 
     setTimeout(() => {
       setIsLoading(false);
-      setError("❌ Login failed. Please check your email and password.");
+      setSuccess("✅ Login successful!");
     }, 1500);
   };
 
@@ -30,6 +32,12 @@ const Login = () => {
         {error && (
           <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
             {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="mt-4 rounded-lg border border-green-500/30 bg-green-500/10 p-3 text-sm text-green-400">
+            {success}
           </div>
         )}
 
