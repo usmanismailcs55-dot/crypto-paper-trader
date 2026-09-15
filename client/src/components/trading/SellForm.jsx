@@ -3,19 +3,35 @@ import { useState } from "react";
 const SellForm = () => {
   const [crypto, setCrypto] = useState("BTC");
   const [amount, setAmount] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    setError("");
+    setIsLoading(true);
 
     console.log("Sell order:", {
       crypto,
       amount,
     });
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setError("❌ Sell order failed. Please try again.");
+    }, 1500);
   };
 
   return (
     <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-6">
       <h3 className="text-xl font-bold">🔴 Sell Cryptocurrency</h3>
+
+      {error && (
+        <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
@@ -60,9 +76,10 @@ const SellForm = () => {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-red-600 px-4 py-3 font-semibold hover:bg-red-500"
+          disabled={isLoading}
+          className="w-full rounded-lg bg-red-600 px-4 py-3 font-semibold hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          🔴 Sell Crypto
+          {isLoading ? "⏳ Processing..." : "🔴 Sell Crypto"}
         </button>
       </form>
     </div>

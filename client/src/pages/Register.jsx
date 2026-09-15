@@ -1,4 +1,30 @@
+import { useState } from "react";
+
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    setError("");
+    setIsLoading(true);
+
+    console.log("Registration:", {
+      name,
+      email,
+      password,
+    });
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setError("❌ Registration failed. Please try again.");
+    }, 1500);
+  };
+
   return (
     <section className="flex min-h-[calc(100vh-73px)] items-center justify-center px-4">
       <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
@@ -10,7 +36,13 @@ const Register = () => {
           Create your crypto paper trading account.
         </p>
 
-        <form className="mt-6 space-y-4">
+        {error && (
+          <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
             <label
               htmlFor="name"
@@ -23,6 +55,8 @@ const Register = () => {
               id="name"
               type="text"
               placeholder="Enter your name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
               className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500"
             />
           </div>
@@ -39,6 +73,8 @@ const Register = () => {
               id="register-email"
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
               className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500"
             />
           </div>
@@ -55,15 +91,18 @@ const Register = () => {
               id="register-password"
               type="password"
               placeholder="Create a password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-white outline-none placeholder:text-slate-500"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-green-600 px-4 py-3 font-semibold hover:bg-green-500"
+            disabled={isLoading}
+            className="w-full rounded-lg bg-green-600 px-4 py-3 font-semibold hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            📝 Create Account
+            {isLoading ? "⏳ Creating account..." : "📝 Create Account"}
           </button>
         </form>
       </div>
