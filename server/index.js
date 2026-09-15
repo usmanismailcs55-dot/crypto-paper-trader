@@ -4,6 +4,7 @@ const connectDB = require('./src/config/db')
 const express = require('express')
 const mongoose = require('mongoose')
 const User = require('./models/User')
+const authRoutes = require('./routes/auth.routes')
 
 connectDB()
 
@@ -11,6 +12,9 @@ const app = express()
 const PORT = process.env.PORT || 5000
 
 app.use(express.json())
+
+// 🔐 Authentication routes
+app.use('/api/auth', authRoutes)
 
 // 🩺 Backend health check
 app.get('/api/health', (req, res) => {
