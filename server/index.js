@@ -5,6 +5,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const User = require('./models/User')
 const authRoutes = require('./routes/auth.routes')
+const userRoutes = require('./routes/userRoutes')
 
 connectDB()
 
@@ -15,6 +16,9 @@ app.use(express.json())
 
 // 🔐 Authentication routes
 app.use('/api/auth', authRoutes)
+
+// 👤 Authenticated user routes
+app.use('/api/users', userRoutes)
 
 // 🩺 Backend health check
 app.get('/api/health', (req, res) => {
