@@ -76,9 +76,16 @@ router.post('/login', async (req, res) => {
       { expiresIn: '7d' }
     )
 
+    // 🍪 Store JWT in HTTP-only cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+
     res.json({
       message: 'Login successful',
-      token,
       user: {
         id: user._id,
         name: user.name,
@@ -113,6 +120,15 @@ router.get('/me', authMiddleware, async (req, res) => {
       error: error.message,
     })
   }
+})
+
+// 🚪 Logout
+router.post('/logout', (req, res) => {
+  res.clearCookie('token')
+
+  res.json({
+    message: 'Logged out successfully',
+  })
 })
 
 module.exports = router

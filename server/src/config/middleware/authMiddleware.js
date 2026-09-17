@@ -3,16 +3,15 @@ const jwt = require('jsonwebtoken')
 const authMiddleware = (req, res, next) => {
   console.log('🔐 Auth middleware running')
 
-  const authHeader = req.headers.authorization
+  // 🍪 Get token from cookie
+  const token = req.cookies.token
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!token) {
     return res.status(401).json({
       success: false,
       message: 'Authentication required',
     })
   }
-
-  const token = authHeader.split(' ')[1]
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
