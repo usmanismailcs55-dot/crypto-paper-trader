@@ -25,12 +25,11 @@ router.post('/register', async (req, res) => {
       })
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10)
-
+    // 🔐 User.js will hash the password automatically
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password,
     })
 
     res.status(201).json({
@@ -62,7 +61,10 @@ router.post('/login', async (req, res) => {
       })
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password)
+    const passwordMatch = await bcrypt.compare(
+      password,
+      user.password
+    )
 
     if (!passwordMatch) {
       return res.status(401).json({

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 
 const Register = () => {
@@ -8,10 +9,9 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Prevent double submission
     if (isLoading) {
       return;
     }
@@ -19,38 +19,72 @@ const Register = () => {
     setError("");
     setSuccess("");
 
-    // Check required fields
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    // 🧹 Clean input
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+
+    // ✅ Required fields
+    if (!trimmedName || !trimmedEmail || !password) {
       setError("⚠️ Please fill in all fields.");
       return;
     }
 
-    // Validate email
+    // 📧 Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(trimmedEmail)) {
       setError("⚠️ Please enter a valid email address.");
       return;
     }
 
-    // Validate password length
+    // 🔑 Validate password
     if (password.length < 6) {
       setError("⚠️ Password must be at least 6 characters.");
       return;
     }
 
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    console.log("Registration:", {
-      name,
-      email,
-      password,
-    });
+      const response = await fetch(
+        "http://localhost:5000/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            name: trimmedName,
+            email: trimmedEmail,
+            password,
+          }),
+        }
+      );
 
-    setTimeout(() => {
-      setIsLoading(false);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || "Registration failed"
+        );
+      }
+
       setSuccess("✅ Account created successfully!");
-    }, 1500);
+
+      // 🧹 Clear form after successful registration
+      setName("");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.error("Registration error:", error);
+
+      setError(
+        `❌ ${error.message || "Registration failed"}`
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -142,7 +176,9 @@ const Register = () => {
             disabled={isLoading}
             className="w-full rounded-lg bg-green-600 px-4 py-3 font-semibold hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isLoading ? "⏳ Creating account..." : "📝 Create Account"}
+            {isLoading
+              ? "⏳ Creating account..."
+              : "📝 Create Account"}
           </button>
         </form>
       </div>
@@ -151,3 +187,4 @@ const Register = () => {
 };
 
 export default Register;
+
